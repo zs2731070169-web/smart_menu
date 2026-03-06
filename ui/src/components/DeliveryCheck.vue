@@ -30,7 +30,6 @@
         </div>
         <button
           class="check-btn"
-          :class="{ loading }"
           @click="handleCheck"
           :disabled="loading || !address.trim()"
         >
@@ -316,10 +315,6 @@ async function handleCheck() {
     margin-left: 10px;
   }
 
-  .input-row > * + * {
-    margin-left: 8px;
-  }
-
   .result-details > * + * {
     margin-left: 20px;
   }
@@ -339,7 +334,6 @@ async function handleCheck() {
   }
 
   .input-row {
-    flex-wrap: wrap;
     gap: 10px;
   }
 
@@ -349,7 +343,6 @@ async function handleCheck() {
 
   .check-btn {
     width: 100%;
-    justify-content: center;
   }
 }
 </style>

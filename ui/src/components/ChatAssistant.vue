@@ -468,10 +468,12 @@ watch(messages, () => {
 }
 
 .message-bubble {
-  max-width: 75%;
-  padding: 10px 14px;
+  max-width: 80%;
+  padding: 8px 14px;
   border-radius: 18px;
   position: relative;
+  margin-top: 6px;
+  margin-bottom: 8px;
   animation: fadeIn 0.2s ease;
 }
 
@@ -489,14 +491,14 @@ watch(messages, () => {
 
 .message-text {
   font-size: 14px;
-  line-height: 1;
+  line-height: 1.5;
   word-break: break-word;
 }
 
 .message-time {
   display: block;
   font-size: 10px;
-  margin-top: 4px;
+  margin-top: 3px;
   opacity: 0.6;
 }
 
