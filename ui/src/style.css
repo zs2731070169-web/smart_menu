@@ -25,7 +25,9 @@
 
 html, body {
   height: 100%;
-  overscroll-behavior: none;
+  /* Allow native pull-to-refresh on mobile browsers */
+  overscroll-behavior-x: none;
+  overscroll-behavior-y: auto;
 }
 
 body {
