@@ -487,7 +487,7 @@ watch(messages, () => {
 
 .message-text {
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1;
   word-break: break-word;
 }
 
@@ -648,26 +648,6 @@ watch(messages, () => {
     transform: scale(1);
     opacity: 1;
   }
-}
-
-.slide-up-enter-active {
-  animation: slideUp 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.slide-up-leave-active {
-  animation: slideUp 0.25s ease reverse;
-}
-
-.fade-enter-active {
-  transition: opacity 0.25s;
-}
-
-.fade-leave-active {
-  transition: opacity 0.2s;
-}
-
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
 }
 
 /* gap fallback for older Android WebView */

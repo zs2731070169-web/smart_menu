@@ -155,9 +155,10 @@ async function handleCheck() {
 }
 
 .input-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+  display: grid;
+  //gap: 8px;
+  //align-items: center;
+
 }
 
 .input-wrap {
@@ -213,15 +214,11 @@ async function handleCheck() {
   color: white;
   border: none;
   border-radius: 10px;
-  padding: 0 18px;
+  margin-top: 10px;
   height: 42px;
   font-size: 14px;
   font-weight: 600;
-  cursor: pointer;
   transition: opacity 0.2s, transform 0.1s;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .check-btn:disabled {
@@ -335,22 +332,6 @@ async function handleCheck() {
   border-radius: var(--radius);
   font-size: 13px;
   border: 1px solid #FFBBBB;
-}
-
-/* 过渡动画 */
-.slide-fade-enter-active {
-  transition: all 0.3s ease;
-}
-.slide-fade-leave-active {
-  transition: all 0.2s ease;
-}
-.slide-fade-enter-from {
-  transform: translateY(-8px);
-  opacity: 0;
-}
-.slide-fade-leave-to {
-  transform: translateY(-4px);
-  opacity: 0;
 }
 
 /* gap fallback for older Android WebView */
