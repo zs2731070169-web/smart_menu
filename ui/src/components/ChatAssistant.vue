@@ -347,7 +347,7 @@ watch(messages, () => {
 .chat-header-info {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
 }
 
 .avatar {
@@ -386,7 +386,7 @@ watch(messages, () => {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 25px;
 }
 
 .new-chat-btn {
