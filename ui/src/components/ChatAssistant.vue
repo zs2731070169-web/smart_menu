@@ -23,7 +23,7 @@
             <div class="avatar">
               <span>🤖</span>
             </div>
-            <div>
+            <div class="assistant-meta">
               <h4 class="chat-name">智能点餐助手</h4>
               <span class="chat-status">
                 <span class="online-dot"></span>
@@ -347,7 +347,13 @@ watch(messages, () => {
 .chat-header-info {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
+}
+
+.assistant-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .avatar {
@@ -362,31 +368,27 @@ watch(messages, () => {
 }
 
 .chat-name {
+  margin: 0;
   font-size: 15px;
   font-weight: 700;
   color: var(--text-primary);
+  line-height: 1.2;
 }
 
 .chat-status {
   display: flex;
   align-items: center;
   gap: 4px;
+  margin: 0;
   font-size: 11px;
   color: var(--success);
-}
-
-.online-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--success);
-  border-radius: 50%;
-  animation: pulse 2s infinite;
+  line-height: 1.2;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 32px;
 }
 
 .new-chat-btn {
@@ -692,6 +694,10 @@ watch(messages, () => {
 
   .chat-name {
     font-size: 14px;
+  }
+
+  .header-actions {
+    gap: 18px;
   }
 
   .new-chat-btn {
