@@ -197,4 +197,57 @@ onMounted(() => {
   white-space: nowrap;
   font-weight: 500;
 }
+
+/* gap fallback for older Android WebView */
+@supports not (gap: 1rem) {
+  .logo-wrap > * + * {
+    margin-left: 12px;
+  }
+
+  .header-badge > * + * {
+    margin-left: 5px;
+  }
+
+  .divider > * + * {
+    margin-left: 10px;
+  }
+}
+
+@media (max-width: 390px) {
+  .app-header {
+    padding: 36px 14px 24px;
+  }
+
+  .header-content {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .logo-wrap {
+    min-width: 0;
+  }
+
+  .logo-icon {
+    font-size: 30px;
+  }
+
+  .app-title {
+    font-size: 19px;
+    letter-spacing: 0.3px;
+  }
+
+  .app-tagline {
+    font-size: 11px;
+  }
+
+  .header-badge {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .divider {
+    padding: 10px 14px;
+  }
+}
 </style>

@@ -11,7 +11,6 @@
 
       <div class="input-row">
         <div class="input-wrap" :class="{ focused: isFocused }">
-          <span class="input-prefix">📌</span>
           <input
             ref="inputRef"
             v-model="address"
@@ -352,5 +351,48 @@ async function handleCheck() {
 .slide-fade-leave-to {
   transform: translateY(-4px);
   opacity: 0;
+}
+
+/* gap fallback for older Android WebView */
+@supports not (gap: 1rem) {
+  .delivery-header > * + * {
+    margin-left: 10px;
+  }
+
+  .input-row > * + * {
+    margin-left: 8px;
+  }
+
+  .result-details > * + * {
+    margin-left: 20px;
+  }
+}
+
+@media (max-width: 390px) {
+  .delivery-section {
+    padding: 0 14px 14px;
+  }
+
+  .delivery-card {
+    padding: 14px 12px;
+  }
+
+  .delivery-header {
+    align-items: flex-start;
+  }
+
+  .input-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .input-wrap {
+    min-width: 0;
+  }
+
+  .check-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 </style>

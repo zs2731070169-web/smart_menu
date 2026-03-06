@@ -263,4 +263,46 @@ defineEmits(['retry'])
   font-size: 14px;
   cursor: pointer;
 }
+
+/* gap fallback for older Android WebView */
+@supports not (gap: 1rem) {
+  .section-title > * + * {
+    margin-left: 6px;
+  }
+
+  .card-header > * + * {
+    margin-left: 6px;
+  }
+}
+
+@media (max-width: 390px) {
+  .menu-section {
+    padding: 0 14px 100px;
+  }
+
+  .section-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .menu-grid {
+    gap: 10px;
+  }
+
+  .menu-card {
+    padding: 12px 10px;
+  }
+
+  .dish-name,
+  .price {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 350px) {
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

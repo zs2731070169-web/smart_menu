@@ -439,7 +439,7 @@ watch(messages, () => {
   padding: 16px 14px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   scroll-behavior: smooth;
 }
 
@@ -668,5 +668,66 @@ watch(messages, () => {
 
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
+}
+
+/* gap fallback for older Android WebView */
+@supports not (gap: 1rem) {
+  .chat-header-info > * + * {
+    margin-left: 10px;
+  }
+
+  .header-actions > * + * {
+    margin-left: 8px;
+  }
+
+  .message-row > * + * {
+    margin-left: 8px;
+  }
+
+  .message-row + .message-row {
+    margin-top: 14px;
+  }
+
+  .thinking > * + * {
+    margin-left: 5px;
+  }
+
+  .hints-list > * {
+    margin: 0 6px 6px 0;
+  }
+}
+
+@media (max-width: 390px) {
+  .chat-header {
+    padding: 14px 12px;
+  }
+
+  .chat-header-info {
+    min-width: 0;
+  }
+
+  .chat-name {
+    font-size: 14px;
+  }
+
+  .new-chat-btn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .close-btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .chat-messages {
+    padding: 14px 12px;
+    gap: 16px;
+  }
+
+  .message-bubble {
+    max-width: 80%;
+    padding: 10px 12px;
+  }
 }
 </style>
