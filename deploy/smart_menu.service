@@ -5,10 +5,15 @@ After=network.target
 [Service]
 User=root
 WorkingDirectory=/opt/smart_menu
-Environment="PATH=/opt/smart_menu/venv/bin"
-ExecStart=/opt/smart_menu/venv/bin/uvicorn api.main:app --host 127.0.0.1 --port 8000
+Environment="PYTHONPATH=/opt/smart_menu/src"
+ExecStart=/opt/smart_menu/.venv/bin/uvicorn api.main:app --host 127.0.0.1 --port 8000 --app-dir /opt/smart_menu/src
 Restart=always
 RestartSec=5
+
+# 日志输出到 systemd journal
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=smart_menu
 
 [Install]
 WantedBy=multi-user.target
