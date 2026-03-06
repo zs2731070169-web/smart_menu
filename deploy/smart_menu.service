@@ -1,0 +1,14 @@
+[Unit]
+Description=Smart Menu FastAPI
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/opt/smart_menu
+Environment="PATH=/opt/smart_menu/venv/bin"
+ExecStart=/opt/smart_menu/venv/bin/uvicorn api.main:app --host 127.0.0.1 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
