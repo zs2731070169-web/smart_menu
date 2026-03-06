@@ -439,7 +439,9 @@ watch(messages, () => {
   padding: 16px 14px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  /* Adaptive vertical spacing between bubbles across phone sizes */
+  --message-row-gap: clamp(14px, 2.8vw, 20px);
+  gap: var(--message-row-gap);
   scroll-behavior: smooth;
 }
 
@@ -665,7 +667,7 @@ watch(messages, () => {
   }
 
   .message-row + .message-row {
-    margin-top: 14px;
+    margin-top: var(--message-row-gap, 16px);
   }
 
   .thinking > * + * {
@@ -702,12 +704,18 @@ watch(messages, () => {
 
   .chat-messages {
     padding: 14px 12px;
-    gap: 16px;
+    --message-row-gap: clamp(16px, 4vw, 22px);
   }
 
   .message-bubble {
     max-width: 80%;
     padding: 10px 12px;
+  }
+}
+
+@media (min-width: 480px) {
+  .chat-messages {
+    --message-row-gap: clamp(16px, 2vw, 24px);
   }
 }
 </style>

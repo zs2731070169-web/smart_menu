@@ -156,9 +156,6 @@ async function handleCheck() {
 
 .input-row {
   display: grid;
-  //gap: 8px;
-  //align-items: center;
-
 }
 
 .input-wrap {
@@ -176,12 +173,6 @@ async function handleCheck() {
 .input-wrap.focused {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-}
-
-.input-prefix {
-  font-size: 14px;
-  margin-right: 6px;
-  flex-shrink: 0;
 }
 
 .address-input {
@@ -214,7 +205,7 @@ async function handleCheck() {
   color: white;
   border: none;
   border-radius: 10px;
-  margin-top: 10px;
+  margin-top: 6px;
   height: 42px;
   font-size: 14px;
   font-weight: 600;
@@ -250,21 +241,6 @@ async function handleCheck() {
   border-radius: var(--radius);
   border: 1.5px solid;
   animation: fadeIn 0.3s ease;
-}
-
-.result-success {
-  background: #F0FBF4;
-  border-color: #A8E6BE;
-}
-
-.result-warning {
-  background: #FFF8F0;
-  border-color: #FFD9B0;
-}
-
-.result-error {
-  background: #FFF0F0;
-  border-color: #FFBBBB;
 }
 
 .result-status {
