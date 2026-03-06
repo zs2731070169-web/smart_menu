@@ -204,7 +204,7 @@ async function handleCheck() {
   color: white;
   border: none;
   border-radius: 10px;
-  margin-top: 6px;
+  margin-top: 4px;
   height: 42px;
   font-size: 14px;
   font-weight: 600;
