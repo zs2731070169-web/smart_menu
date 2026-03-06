@@ -138,7 +138,7 @@ const messagesRef = ref(null)
 const chatInputRef = ref(null)
 const showHints = ref(true)
 
-const hints = ['推荐几道好吃的菜', '有什么素食选择？', '辣的菜有哪些？']
+const hints = ['推荐几道好吃的菜', '订餐联系']
 
 const messages = ref([
   {role: 'assistant', text: '您好！我是智能点餐助手，可以根据您的口味偏好为您推荐菜品。有什么我可以帮您的吗？', time: formatTime(new Date())},
@@ -315,7 +315,7 @@ watch(messages, () => {
   right: 0;
   max-width: 480px;
   margin: 0 auto;
-  height: 70vh;
+  height: 90vh;
   background: var(--bg-card);
   border-radius: 24px 24px 0 0;
   display: flex;
@@ -554,7 +554,7 @@ watch(messages, () => {
   background: var(--bg);
   border: 1.5px solid var(--border);
   color: var(--primary);
-  font-size: 12px;
+  font-size: 10px;
   padding: 5px 12px;
   border-radius: 16px;
   cursor: pointer;
