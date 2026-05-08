@@ -1,8 +1,8 @@
 import logging
 
-import mysql
+import mysql.connector
 
-from tools.db_tool import DBConnection
+from clients.mysql_client import DBConnection
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

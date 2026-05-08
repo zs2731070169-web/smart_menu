@@ -1,5 +1,6 @@
 import logging
 import os
+from pathlib import Path
 from typing import Union
 
 import dashscope
@@ -8,12 +9,14 @@ import dotenv
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-dotenv.load_dotenv()
+# 显式指向项目根的 .env，避免依赖 cwd
+_PROJECT_ROOT = Path(__file__).parents[2]
+dotenv.load_dotenv(_PROJECT_ROOT / ".env")
 
 
 class Embedding:
     def __init__(self):
-        self.embedding_api_key = os.environ.get("DASHSCOPE_API_KEY", "")
+        self.embedding_api_key = os.environ.get("API_KEY", "")
         self.embedding_model = os.environ.get("EMBEDDING_MODEL", "")
         self.dimension = 1536
 

@@ -1,34 +1,17 @@
 import logging
-import secrets
 import uuid
 
-from fastapi import FastAPI, Request, Query
-from starlette.middleware.sessions import SessionMiddleware
+from fastapi import APIRouter, Request, Query
 
-from schemas.api_schemas import DeliveryReq, MenuResp, DeliveryResp, ChatResp
-from service.menu_service import get_all_menus, check_delivery_endpoint, chat
+from schemas.route_schemas import DeliveryReq, MenuResp, DeliveryResp, ChatResp
+from service.menu import get_all_menus, check_delivery_endpoint, chat
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(
-    title="Smart Menu API",
-    description="provides endpoints to access menu information for the smart ordering assistant",
-    version="1.0.0",
-    root_path="/smart/menu"
-)
-
-# 添加 SessionMiddleware 来处理基于签名的 cookie 会话
-app.add_middleware(
-    SessionMiddleware,
-    secret_key=secrets.token_hex(32),
-    max_age=3600,
-    https_only=False,
-    same_site="lax"
-)
+router = APIRouter()
 
 
-@app.get("/query/menus", response_model=MenuResp)
+@router.get("/query/menus", response_model=MenuResp)
 async def query_all_menus():
     """
     获取所有菜单项
@@ -38,7 +21,7 @@ async def query_all_menus():
     return get_all_menus()
 
 
-@app.post("/query/delivery", response_model=DeliveryResp)
+@router.post("/query/delivery", response_model=DeliveryResp)
 async def query_delivery_endpoint(deliveryReq: DeliveryReq):
     """
     配送范围检查接口
@@ -48,7 +31,7 @@ async def query_delivery_endpoint(deliveryReq: DeliveryReq):
     return check_delivery_endpoint(deliveryReq)
 
 
-@app.get("/chat", response_model=ChatResp)
+@router.get("/chat", response_model=ChatResp)
 async def chat_endpoint(
         request: Request,
         query: str = Query(default="", description="用户查询")
@@ -77,7 +60,7 @@ async def chat_endpoint(
     return response
 
 
-@app.post("/new/chat")
+@router.post("/new/chat")
 async def new_chat(request: Request) -> bool:
     """
     创建新的聊天会话，删除旧的session_id

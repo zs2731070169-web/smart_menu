@@ -4,14 +4,14 @@ import uuid
 
 import dotenv
 
-from agent.smart_assistant import chat_assistant
+from agent.chat_engine import chat_assistant
 from config.config import SPICE_LEVEL, IS_VEGETARIAN
 from repository.menu_repo import get_all_menus_repo
-from schemas.api_schemas import DeliveryReq, DeliveryResp, MenuResp, ChatResp
-from tools.amap_tool import check_delivery_info
-from tools.data_process_tool import text_recursive_split
-from tools.embedding_tool import embed_documents, embedding_model
-from tools.pinecone_tool import create_pinecone_index, clear_vectors, batch_insert
+from schemas.route_schemas import DeliveryReq, DeliveryResp, MenuResp, ChatResp
+from clients.amap_client import check_delivery_info
+from service.retrieval import text_recursive_split
+from clients.embedding_client import embed_documents, embedding_model
+from clients.pinecone_client import create_pinecone_index, clear_vectors, batch_insert
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

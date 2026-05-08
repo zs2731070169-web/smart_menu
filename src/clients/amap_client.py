@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 import dotenv
 
-from tools.request_tool import get
+from utils.request import get
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

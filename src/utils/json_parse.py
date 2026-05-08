@@ -1,41 +1,7 @@
 import logging
 
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
-def text_recursive_split(text: str, chunk_size: int, chunk_overlap: int, separators: list[str]) -> list:
-    """
-    文本切分,使用langchain的递归切分
-    :param text:
-    :return:
-    """
-    try:
-        if not text.strip():
-            logger.warning("Input text is empty or whitespace.")
-            return []
-
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=chunk_size,
-            chunk_overlap=chunk_overlap,
-            separators=separators,
-            keep_separator=False,
-            add_start_index=False,
-            length_function=len
-        )
-        split_list = text_splitter.split_text(text.strip())
-
-        if not split_list:
-            logger.warning("No chunks created from the input text.")
-            return []
-
-        logger.info("chunks created")
-        return split_list
-    except Exception as e:
-        logger.error(f"Error during text splitting: {e}")
-        return []
 
 
 def extract_json_from_llm_output(llm_output: str) -> str:
@@ -58,7 +24,6 @@ def extract_json_from_llm_output(llm_output: str) -> str:
             "format_query": "请告诉我今天的特价菜有哪些？"
         }
         ```
-    :param self:
     :param llm_output:
     :return:
     """
