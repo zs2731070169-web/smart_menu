@@ -2,3 +2,5 @@
 /.jbeval/
 /.idea/
 /.env
+__pycache__/
+*.py[cod]
