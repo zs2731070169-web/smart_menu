@@ -7,7 +7,7 @@ import dotenv
 from agent.tools.base import ToolRegistry
 from agent.tools.delivery_check_tool import delivery_check_tool
 from agent.tools.menu_inquiry_tool import menu_inquiry_tool
-from api import get_llm_client
+from api import get_llm_client, SupportsInvokeMessages
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -23,7 +23,7 @@ def _init_tools() -> ToolRegistry:
     return registry
 
 
-def _init_llm():
+def _init_llm() -> SupportsInvokeMessages:
     """初始化 LLM 客户端"""
     llm_client = get_llm_client(os.getenv("PROVIDER"))
     logger.info("LLM 客户端初始化完成")
@@ -31,6 +31,6 @@ def _init_llm():
 
 
 tool_registry: ToolRegistry = _init_tools()
-llm_client = _init_llm()
+llm_client: SupportsInvokeMessages = _init_llm()
 
 __all__ = ["tool_registry", "llm_client"]
