@@ -4,11 +4,11 @@ import uuid
 
 import dotenv
 
-from agent.chat_engine import chat_assistant
+from agent.chat_engine import handle_chat
 from config.config import SPICE_LEVEL, IS_VEGETARIAN
 from repository.menu_repo import get_all_menus_repo
-from schemas.route_schemas import DeliveryReq, DeliveryResp, MenuResp, ChatResp
 from clients.amap_client import check_delivery_info
+from server.schemas.route_schemas import MenuResp, DeliveryReq, DeliveryResp, ChatResp
 from service.retrieval import text_recursive_split
 from clients.embedding_client import embed_documents, embedding_model
 from clients.pinecone_client import create_pinecone_index, clear_vectors, batch_insert
@@ -98,17 +98,24 @@ def check_delivery_endpoint(deliveryReq: DeliveryReq) -> DeliveryResp:
         )
 
 
-def chat(query: str, session_id: str) -> ChatResp:
+async def chat(query: str, session_id: str) -> ChatResp:
     """
     处理用户的聊天查询
     :param query:
     :param session_id:
     :return:
     """
-    response = chat_assistant(query, session_id)
+    response = await handle_chat(query, session_id)
+    # 工具产出可能是结构化数据(dict, 如菜品推荐)或自然语言文本(str, 如配送回复),
+    # 按类型分别落到 ChatResp 的 data / message 字段, 避免 Pydantic 校验失败
+    data = response.data if isinstance(response.data, dict) else None
+    message = response.message
+    if message is None and isinstance(response.data, str):
+        message = response.data
     return ChatResp(
-        status=True,
-        message=response
+        status=response.success,
+        data=data,
+        message=message,
     )
 
 

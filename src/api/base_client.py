@@ -9,7 +9,7 @@ class ApiMessageRequest:
     """统一的 llm 调用入参"""
 
     model: str
-    messages: list[ConversationMessage]
+    message: ConversationMessage
     system_prompt: str | None = None
     max_tokens: int = 4096
     tools: list[dict[str, Any]] = field(default_factory=list)
@@ -29,6 +29,6 @@ class ApiMessageResponse:
 class SupportsInvokeMessages(Protocol):
     """llm 客户端协议,所有 llm 调用统一通过该接口"""
 
-    def invoke_message(self, request: ApiMessageRequest) -> ApiMessageResponse:
+    async def ainvoke_message(self, request: ApiMessageRequest) -> ApiMessageResponse:
         """调用 llm 返回统一结构化响应"""
         ...

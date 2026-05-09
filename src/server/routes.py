@@ -3,7 +3,7 @@ import uuid
 
 from fastapi import APIRouter, Request, Query
 
-from schemas.route_schemas import DeliveryReq, MenuResp, DeliveryResp, ChatResp
+from server.schemas.route_schemas import MenuResp, DeliveryResp, DeliveryReq, ChatResp
 from service.menu import get_all_menus, check_delivery_endpoint, chat
 
 logger = logging.getLogger(__name__)
@@ -48,14 +48,12 @@ async def chat_endpoint(
         if "session_id" not in session:
             request.session["session_id"] = str(uuid.uuid4().hex)
         session_id = request.session.get("session_id")
-        response = chat(query, session_id)
+        response = await chat(query, session_id)
     except Exception as e:
         logger.error(f"Error in chat endpoint: {e}")
         return ChatResp(
             status=False,
-            message={
-                "message": "聊天服务发生错误，请稍后再试。"
-            }
+            message="聊天服务发生错误，请稍后再试。"
         )
     return response
 

@@ -17,4 +17,3 @@ class ConversationMessage(BaseModel):
         if value is None:
             return []
         return value
-

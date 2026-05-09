@@ -20,7 +20,7 @@ class AMapConfig:
     API_KEY = os.getenv("AMAP_API_KEY", "")  # 高德地图API Key，必须在环境变量中设置
     MERCHANT_LONGITUDE = os.getenv("MERCHANT_LONGITUDE", "")  # 默认商户经度，格式为字符串，例如 "116.397128"
     MERCHANT_LATITUDE = os.getenv("MERCHANT_LATITUDE", "")  # 默认商户纬度，格式为字符串，例如 "39.916527"
-    DELIVERY_RADIUS = int(os.getenv("DELIVERY_RADIUS", "3000"))  # 默认配送半径为3000米
+    DELIVERY_RADIUS = int(os.getenv("DELIVERY_RADIUS", "3000"))  # 默认配送半径为5000米
     DEFAULT_PATH_MODE = os.getenv("DEFAULT_PATH_MODE", "2")  # 默认路径规划模式为骑行
     PATH_MODE = {
         "0": "driving",  # 驾车
@@ -72,6 +72,10 @@ def check_delivery_info(address: str, mode: str) -> dict:
         # 需要判断是否在配送范围内，如果不在配送范围内，则返回距离和预计时间，但不返回路径规划步骤
         distance = direction_info.get("distance", "")
         is_range = float(distance) <= AMapConfig.DELIVERY_RADIUS
+        logger.info(f"delivery check: address='{address}' "
+                    f"origin=({AMapConfig.MERCHANT_LONGITUDE},{AMapConfig.MERCHANT_LATITUDE}) "
+                    f"dest=({longitude},{latitude}) "
+                    f"distance={distance}m radius={AMapConfig.DELIVERY_RADIUS}m in_range={is_range}")
         if not is_range:
             return {
                 "status": is_range,
@@ -96,6 +100,44 @@ def check_delivery_info(address: str, mode: str) -> dict:
             "status": False,
             "message": f"An error occurred while fetching delivery information: {e}"
         }
+
+
+def _search_poi(address: str) -> dict | None:
+    """
+    使用高德 POI 文本搜索（place/text）兜底定位。
+    适用于"万盛区步行街"这类 geocode 只能命中区县中心、找不到具体 POI 的场景。
+    :param address: 地址或 POI 关键字
+    :return: 命中时返回与 get_geocode 相同结构的字典；未命中或失败返回 None
+    """
+    try:
+        poi_data = get(
+            url="https://restapi.amap.com/v3/place/text",
+            params={
+                "key": AMapConfig.API_KEY,
+                "keywords": address.strip(),
+                "output": "JSON",
+                "offset": "1",
+                "page": "1",
+            }
+        )
+        if int(poi_data.get("status", 0)) != 1:
+            return None
+        pois = poi_data.get("pois") or []
+        if not pois:
+            return None
+        first = pois[0]
+        location = (first.get("location") or "").split(",")
+        if len(location) != 2:
+            return None
+        return {
+            "status": True,
+            "formatted_address": first.get("name", "") or first.get("address", ""),
+            "longitude": location[0],
+            "latitude": location[1],
+        }
+    except Exception as e:
+        logger.warning(f"POI fallback failed for address '{address}': {e}")
+        return None
 
 
 # 获取高德地理位置编码
@@ -128,6 +170,21 @@ def get_geocode(address: str) -> dict:
 
         # geocodes 是一个列表，包含一个或多个地理编码结果。我们取第一个最精确的结果
         geocodes = geo_data.get("geocodes", [{}])[0]
+        level = geocodes.get("level", "")
+        logger.info(f"geocode hit: address='{address}' level='{level}' "
+                    f"formatted='{geocodes.get('formatted_address', '')}' "
+                    f"location='{geocodes.get('location', '')}'")
+
+        # 命中粒度过粗（省/城市/区县）说明高德没真正定位到目标点，
+        # 会回退到行政中心点导致距离虚高
+        # 此时改用 POI 搜索兜底，按地址关键字精确查找。
+        if level in ("省", "城市", "区县"):
+            poi = _search_poi(address)
+            if poi:
+                logger.info(f"geocode fallback to POI for '{address}': "
+                            f"{poi['formatted_address']} ({poi['longitude']},{poi['latitude']})")
+                return poi
+
         # location 字段包含经纬度信息，格式为 "经度,纬度"，我们需要分割它来获取单独的经度和纬度
         location = geocodes.get("location", "").split(",")
         return {
@@ -144,6 +201,7 @@ def get_geocode(address: str) -> dict:
 def get_direction(longitude: str, latitude: str, mode: str) -> dict:
     """
     获取高德地图路径规划
+    :param mode:
     :param longitude: 目的地经度
     :param latitude: 目的地纬度
     :return: 包含路径规划信息的字典
@@ -211,39 +269,6 @@ def get_direction(longitude: str, latitude: str, mode: str) -> dict:
 
 
 if __name__ == '__main__':
-    # # 示例地址
-    # address = "天安门"
-    # geocode_info = get_geocode(address)
-    # print(f"Geocode info for '{address}': {geocode_info}")
-    #
-    # # 示例路径规划
-    # longitude = geocode_info["longitude"]
-    # latitude = geocode_info["latitude"]
-    # direction_info = get_direction(longitude, latitude, mode="2")
-    # print(f"Direction info for destination '{longitude},{latitude}': {direction_info}")
-    #
-    # # 示例地址
-    # address = "北京人民大会堂"
-    # geocode_info = get_geocode(address)
-    # print(f"Geocode info for '{address}': {geocode_info}")
-    #
-    # # 示例路径规划
-    # longitude = geocode_info["longitude"]
-    # latitude = geocode_info["latitude"]
-    # direction_info = get_direction(longitude, latitude, mode="1")
-    # print(f"Direction info for destination '{longitude},{latitude}': {direction_info}")
-    #
-    # # 示例地址
-    # address = "北京市海淀区人民法院"
-    # geocode_info = get_geocode(address)
-    # print(f"Geocode info for '{address}': {geocode_info}")
-    #
-    # # 示例路径规划
-    # longitude = geocode_info["longitude"]
-    # latitude = geocode_info["latitude"]
-    # direction_info = get_direction(longitude, latitude, mode="0")
-    # print(f"Direction info for destination '{longitude},{latitude}': {direction_info}")
-
     # 示例地址
     address = "北京市海淀区人民法院"
     delivery_info = check_delivery_info(address, mode="2")

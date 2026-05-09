@@ -29,4 +29,5 @@ class DeliveryReq(BaseModel):
 
 class ChatResp(BaseModel):
     status: bool
-    message: dict = Field(default=dict, description="聊天回复消息")
+    data: dict | None = Field(default=None, description="聊天回复数据")
+    message: str | None = Field(default=None, description="聊天回复消息")

@@ -2,7 +2,7 @@ import json
 import logging
 import os
 
-from openai import OpenAI
+from openai import AsyncOpenAI
 
 from api.base_client import ApiMessageRequest, ApiMessageResponse
 
@@ -17,15 +17,14 @@ class OpenAIClient:
             raise ValueError("CLOSEAI_API_KEY 未配置")
         if not base_url:
             raise ValueError("CLOSEAI_API_BASE 未配置")
-        self._client = OpenAI(api_key=api_key, base_url=base_url, timeout=timeout)
+        self._client = AsyncOpenAI(api_key=api_key, base_url=base_url, timeout=timeout)
 
-    def invoke_message(self, request: ApiMessageRequest) -> ApiMessageResponse:
+    async def ainvoke_message(self, request: ApiMessageRequest) -> ApiMessageResponse:
         """使用 openai 接口调用,返回统一响应"""
         payload: list[dict] = []
         if request.system_prompt:
             payload.append({"role": "system", "content": request.system_prompt})
-        for m in request.messages:
-            payload.append({"role": m.role, "content": "\n".join(m.content)})
+        payload.append({"role": request.message.role, "content": "\n".join(request.message.content)})
 
         kwargs: dict = {
             "model": request.model,
@@ -35,7 +34,7 @@ class OpenAIClient:
         if request.tools:
             kwargs["tools"] = request.tools
 
-        completion = self._client.chat.completions.create(**kwargs)
+        completion = await self._client.chat.completions.create(**kwargs)
         choice = completion.choices[0]
 
         # 解析 llm 返回的工具调用

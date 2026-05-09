@@ -14,7 +14,7 @@ _cache: dict[str, SupportsInvokeMessages] = {}
 
 
 def get_llm_client(provider: str | None = None) -> SupportsInvokeMessages:
-    """按 provider 名称获取 llm 客户端;未指定时读取环境变量 LLM_PROVIDER,默认 openai"""
+    """按 provider 名称获取 llm 客户端; 未指定时读取环境变量 PROVIDER, 默认 openai"""
     key = (provider or os.getenv("PROVIDER") or "openai").lower()
     if key not in _REGISTRY:
         raise ValueError(f"未注册的 llm provider: {key}, 已注册: {list(_REGISTRY)}")

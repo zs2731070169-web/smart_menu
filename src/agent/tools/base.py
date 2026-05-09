@@ -6,13 +6,17 @@ from pydantic import BaseModel
 from pydantic.dataclasses import dataclass
 
 
+@dataclass
+class ToolExecutionContext:
+    """工具执行上下文"""
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+
 @dataclass(frozen=True)
 class ToolResult:
     """标准工具返回对象"""
-
-    output: str
+    output: Any = None
     is_error: bool = False
-    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class BaseTool(ABC):
@@ -24,7 +28,7 @@ class BaseTool(ABC):
     input_model: type[BaseModel]
 
     @abstractmethod
-    def execute(self, arguments: BaseModel) -> ToolResult:
+    async def execute(self, arguments: BaseModel, context: ToolExecutionContext) -> ToolResult:
         """执行工具"""
 
     def to_api_schema(self) -> dict[str, Any]:
