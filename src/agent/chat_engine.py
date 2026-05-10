@@ -36,6 +36,9 @@ class ChatResponse:
 
 
 class ChatEngine:
+    """
+    对话引擎，agent的核心处理流程
+    """
 
     def __init__(self):
         # 工具注册器与 LLM 客户端在 agent/__init__.py 中初始化
